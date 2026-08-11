@@ -1709,43 +1709,11 @@ body {
     linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4);
 }
 
-@supports (-webkit-touch-callout: none) {
-  html,
-  body,
-  .phone-shell {
-    height: -webkit-fill-available;
-    min-height: -webkit-fill-available;
-  }
-}
-
 /* 壁纸固定铺满，包括底部安全区 */
 .wallpaper,
 .wallpaper-mask {
   position: fixed;
   inset: 0;
-}
-
-/* 给底部 Home Indicator 区域补一层同款毛玻璃背景 */
-.phone-shell::after {
-  content: "";
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  height: calc(env(safe-area-inset-bottom, 0px) + 96px);
-  z-index: 5;
-  pointer-events: none;
-
-  background: linear-gradient(
-    to bottom,
-    rgba(245, 245, 245, 0),
-    rgba(238, 238, 238, 0.48) 42%,
-    rgba(235, 235, 235, 0.72)
-  );
-
-  backdrop-filter: blur(18px) saturate(1.08);
-  -webkit-backdrop-filter: blur(18px) saturate(1.08);
 }
 
 /* Dock 保持在补底层上方 */
@@ -1771,4 +1739,127 @@ body {
 /* 主屏内容底部预留跟新 Dock 位置匹配 */
 .home-viewport {
   bottom: calc(92px + max(10px, calc(env(safe-area-inset-bottom, 0px) - 18px)));
+}
+
+/* ===== iPhone 底部白条最终修复 ===== */
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 20% 18%,
+      rgba(255, 255, 255, 0.92),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 74% 16%,
+      rgba(240, 240, 240, 0.85),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 28% 70%,
+      rgba(210, 210, 210, 0.46),
+      transparent 38%
+    ),
+    linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4);
+
+  overscroll-behavior: none;
+}
+
+body {
+  position: fixed;
+  inset: 0;
+}
+
+.phone-shell {
+  position: fixed;
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 20% 18%,
+      rgba(255, 255, 255, 0.92),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 74% 16%,
+      rgba(240, 240, 240, 0.85),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 28% 70%,
+      rgba(210, 210, 210, 0.46),
+      transparent 38%
+    ),
+    linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4);
+}
+
+/* 壁纸强制铺满真实屏幕 */
+.wallpaper,
+.wallpaper-mask {
+  position: fixed;
+  inset: 0;
+}
+
+/* 底部补色层，不再只依赖 phone-shell 内部高度 */
+body::after {
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: calc(env(safe-area-inset-bottom, 0px) + 140px);
+  z-index: 1;
+  pointer-events: none;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(245, 245, 245, 0),
+    rgba(238, 238, 238, 0.58) 45%,
+    rgba(235, 235, 235, 0.88)
+  );
+
+  backdrop-filter: blur(18px) saturate(1.08);
+  -webkit-backdrop-filter: blur(18px) saturate(1.08);
+}
+
+/* 主界面层级保持在补底层上方 */
+.status-bar,
+.home-viewport,
+.page-dots,
+.dock {
+  z-index: 10;
+}
+
+/* Dock 贴近底部 */
+.dock {
+  z-index: 30;
+  bottom: max(8px, calc(env(safe-area-inset-bottom, 0px) - 20px));
+}
+
+/* 分页点跟 Dock */
+.page-dots {
+  z-index: 31;
+  bottom: calc(max(8px, calc(env(safe-area-inset-bottom, 0px) - 20px)) + 86px);
+}
+
+/* 主屏内容底部预留 */
+.home-viewport {
+  bottom: calc(92px + max(8px, calc(env(safe-area-inset-bottom, 0px) - 20px)));
 }
