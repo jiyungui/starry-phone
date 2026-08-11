@@ -2,9 +2,9 @@
   "name": "星星机",
   "short_name": "星星机",
   "display": "standalone",
-  "background_color": "#dcdcdc",
-  "theme_color": "#eeeeee",
-  "start_url": "./index.html?v=pwa-fix-2",
-  "scope": "./",
+  "background_color": "#d8d8d8",
+  "theme_color": "#d8d8d8",
+  "start_url": "/index.html?v=pwa-fix-3",
+  "scope": "/",
   "orientation": "portrait"
 }

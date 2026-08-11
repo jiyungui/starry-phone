@@ -252,7 +252,7 @@ function unlockHomeScreen() {
   if (activationScreen) {
     activationScreen.hidden = true;
   }
-
+  document.querySelector(".phone-shell")?.classList.add("activated");
   if (viewport) viewport.style.pointerEvents = "";
   if (dock) dock.style.pointerEvents = "";
   if (dots) dots.style.pointerEvents = "";

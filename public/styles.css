@@ -1631,15 +1631,9 @@ button {
 }
 
 /* =====================================================
-   iOS PWA 底部安全区最终清理版
-   只保留这一份，不要再叠加其他 bottom-fix
+   iOS PWA 底部安全区最终版 v3
 ===================================================== */
 
-:root {
-  --real-safe-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-/* html/body 背景必须和壁纸一致，不能用 #e9eef5，否则底部会露蓝条 */
 html,
 body {
   width: 100%;
@@ -1649,6 +1643,7 @@ body {
   padding: 0;
   overflow: hidden;
 
+  background-color: #d8d8d8 !important;
   background:
     radial-gradient(
       circle at 20% 18%,
@@ -1668,7 +1663,11 @@ body {
     linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4) !important;
 }
 
-/* 主容器铺满屏幕 */
+body {
+  position: relative;
+}
+
+/* 主容器铺满 */
 .phone-shell {
   position: fixed !important;
   inset: 0 !important;
@@ -1680,6 +1679,7 @@ body {
   overflow: hidden !important;
   isolation: isolate;
 
+  background-color: #d8d8d8 !important;
   background:
     radial-gradient(
       circle at 20% 18%,
@@ -1699,7 +1699,6 @@ body {
     linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4) !important;
 }
 
-/* 支持 dvh 时再覆盖 */
 @supports (height: 100dvh) {
   .phone-shell {
     height: 100dvh !important;
@@ -1707,14 +1706,14 @@ body {
   }
 }
 
-/* 壁纸铺满 */
+/* 给 iOS 底部多铺一点背景，避免安全区露白 */
 .wallpaper,
 .wallpaper-mask {
   position: fixed !important;
-  inset: 0 !important;
+  inset: -2px 0 -80px 0 !important;
 }
 
-/* 不再使用补底遮罩，防止挡住 Dock */
+/* 不要使用会挡住 Dock 的伪元素 */
 .phone-shell::after,
 body::after {
   display: none !important;
@@ -1724,32 +1723,32 @@ body::after {
 /* Dock 贴近底部 */
 .dock {
   position: fixed !important;
-  z-index: 30 !important;
+  z-index: 100 !important;
 
   left: max(20px, env(safe-area-inset-left)) !important;
   right: max(20px, env(safe-area-inset-right)) !important;
 
-  bottom: max(8px, calc(env(safe-area-inset-bottom, 0px) - 20px)) !important;
+  bottom: max(6px, calc(env(safe-area-inset-bottom, 0px) - 24px)) !important;
 }
 
 /* 分页点 */
 .page-dots {
   position: fixed !important;
-  z-index: 31 !important;
+  z-index: 101 !important;
 
   bottom: calc(
-    max(8px, calc(env(safe-area-inset-bottom, 0px) - 20px)) + 86px
+    max(6px, calc(env(safe-area-inset-bottom, 0px) - 24px)) + 86px
   ) !important;
 }
 
-/* 主屏底部预留 */
+/* 主屏内容底部预留 */
 .home-viewport {
   bottom: calc(
-    92px + max(8px, calc(env(safe-area-inset-bottom, 0px) - 20px))
+    92px + max(6px, calc(env(safe-area-inset-bottom, 0px) - 24px))
   ) !important;
 }
 
-/* 激活页必须永远高于主屏 */
+/* 激活锁层级 */
 .activation-screen {
   z-index: 9000 !important;
 }
