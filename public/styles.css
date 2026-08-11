@@ -1630,119 +1630,16 @@ button {
   transform: scale(0.96);
 }
 
-/* ===============================
-   iOS 桌面 PWA 全屏安全区修复
-   解决底部白条 / 蓝条 / Dock 悬空过高
-================================ */
+/* =====================================================
+   iOS PWA 底部安全区最终清理版
+   只保留这一份，不要再叠加其他 bottom-fix
+===================================================== */
 
-html {
-  width: 100%;
-  height: 100%;
-  min-height: 100%;
-  overflow: hidden;
-  background:
-    radial-gradient(
-      circle at 20% 18%,
-      rgba(255, 255, 255, 0.92),
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at 74% 16%,
-      rgba(240, 240, 240, 0.85),
-      transparent 32%
-    ),
-    radial-gradient(
-      circle at 28% 70%,
-      rgba(210, 210, 210, 0.46),
-      transparent 38%
-    ),
-    linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4);
+:root {
+  --real-safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-body {
-  width: 100%;
-  height: 100%;
-  min-height: 100%;
-  overflow: hidden;
-  overscroll-behavior: none;
-
-  background:
-    radial-gradient(
-      circle at 20% 18%,
-      rgba(255, 255, 255, 0.92),
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at 74% 16%,
-      rgba(240, 240, 240, 0.85),
-      transparent 32%
-    ),
-    radial-gradient(
-      circle at 28% 70%,
-      rgba(210, 210, 210, 0.46),
-      transparent 38%
-    ),
-    linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4);
-}
-
-/* iOS Safari / PWA 高度兼容 */
-.phone-shell {
-  width: 100vw;
-  height: 100vh;
-  min-height: 100vh;
-  background:
-    radial-gradient(
-      circle at 20% 18%,
-      rgba(255, 255, 255, 0.92),
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at 74% 16%,
-      rgba(240, 240, 240, 0.85),
-      transparent 32%
-    ),
-    radial-gradient(
-      circle at 28% 70%,
-      rgba(210, 210, 210, 0.46),
-      transparent 38%
-    ),
-    linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4);
-}
-
-/* 壁纸固定铺满，包括底部安全区 */
-.wallpaper,
-.wallpaper-mask {
-  position: fixed;
-  inset: 0;
-}
-
-/* Dock 保持在补底层上方 */
-.dock {
-  z-index: 30;
-
-  /*
-    原来一般是：
-    bottom: calc(16px + var(--safe-bottom));
-    这会导致 iPhone 底部空白过高。
-
-    这里让它更贴近底部。
-  */
-  bottom: max(10px, calc(env(safe-area-inset-bottom, 0px) - 18px));
-}
-
-/* 分页点跟着下移一点 */
-.page-dots {
-  z-index: 31;
-  bottom: calc(max(10px, calc(env(safe-area-inset-bottom, 0px) - 18px)) + 86px);
-}
-
-/* 主屏内容底部预留跟新 Dock 位置匹配 */
-.home-viewport {
-  bottom: calc(92px + max(10px, calc(env(safe-area-inset-bottom, 0px) - 18px)));
-}
-
-/* ===== iPhone 底部白条最终修复 ===== */
-
+/* html/body 背景必须和壁纸一致，不能用 #e9eef5，否则底部会露蓝条 */
 html,
 body {
   width: 100%;
@@ -1768,22 +1665,20 @@ body {
       rgba(210, 210, 210, 0.46),
       transparent 38%
     ),
-    linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4);
-
-  overscroll-behavior: none;
+    linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4) !important;
 }
 
+/* 主容器铺满屏幕 */
 .phone-shell {
-  position: fixed;
-  inset: 0;
+  position: fixed !important;
+  inset: 0 !important;
 
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  min-height: 100vh;
-  min-height: 100dvh;
+  width: 100vw !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
 
-  overflow: hidden;
+  overflow: hidden !important;
+  isolation: isolate;
 
   background:
     radial-gradient(
@@ -1801,107 +1696,64 @@ body {
       rgba(210, 210, 210, 0.46),
       transparent 38%
     ),
-    linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4);
+    linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4) !important;
 }
 
-/* 壁纸强制铺满真实屏幕 */
-.wallpaper,
-.wallpaper-mask {
-  position: fixed;
-  inset: 0;
-}
-
-/* 主界面层级保持在补底层上方 */
-.status-bar,
-.home-viewport,
-.page-dots,
-.dock {
-  z-index: 10;
-}
-
-/* Dock 贴近底部 */
-.dock {
-  z-index: 30;
-  bottom: max(8px, calc(env(safe-area-inset-bottom, 0px) - 20px));
-}
-
-/* 分页点跟 Dock */
-.page-dots {
-  z-index: 31;
-  bottom: calc(max(8px, calc(env(safe-area-inset-bottom, 0px) - 20px)) + 86px);
-}
-
-/* 主屏内容底部预留 */
-.home-viewport {
-  bottom: calc(92px + max(8px, calc(env(safe-area-inset-bottom, 0px) - 20px)));
-}
-
-/* ===== 底部白条修复 v2：不要用 body::after 遮罩 ===== */
-
-html,
-body {
-  width: 100%;
-  height: 100%;
-  min-height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background: #e9eef5;
-}
-
-body {
-  position: relative;
-}
-
-/* 主容器铺满可视区域 */
-.phone-shell {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  min-height: 100vh;
-  min-height: 100dvh;
-  overflow: hidden;
-  background:
-    radial-gradient(
-      circle at 20% 18%,
-      rgba(255, 255, 255, 0.92),
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at 74% 16%,
-      rgba(240, 240, 240, 0.85),
-      transparent 32%
-    ),
-    radial-gradient(
-      circle at 28% 70%,
-      rgba(210, 210, 210, 0.46),
-      transparent 38%
-    ),
-    linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4);
+/* 支持 dvh 时再覆盖 */
+@supports (height: 100dvh) {
+  .phone-shell {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+  }
 }
 
 /* 壁纸铺满 */
 .wallpaper,
 .wallpaper-mask {
-  position: fixed;
-  inset: 0;
+  position: fixed !important;
+  inset: 0 !important;
 }
 
-/* Dock 正常显示 */
+/* 不再使用补底遮罩，防止挡住 Dock */
+.phone-shell::after,
+body::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Dock 贴近底部 */
 .dock {
-  z-index: 30;
-  bottom: max(8px, calc(env(safe-area-inset-bottom, 0px) - 20px));
+  position: fixed !important;
+  z-index: 30 !important;
+
+  left: max(20px, env(safe-area-inset-left)) !important;
+  right: max(20px, env(safe-area-inset-right)) !important;
+
+  bottom: max(8px, calc(env(safe-area-inset-bottom, 0px) - 20px)) !important;
 }
 
-/* 分页点位置 */
+/* 分页点 */
 .page-dots {
-  z-index: 31;
-  bottom: calc(max(8px, calc(env(safe-area-inset-bottom, 0px) - 20px)) + 86px);
+  position: fixed !important;
+  z-index: 31 !important;
+
+  bottom: calc(
+    max(8px, calc(env(safe-area-inset-bottom, 0px) - 20px)) + 86px
+  ) !important;
 }
 
-/* 主屏内容底部预留 */
+/* 主屏底部预留 */
 .home-viewport {
-  bottom: calc(92px + max(8px, calc(env(safe-area-inset-bottom, 0px) - 20px)));
+  bottom: calc(
+    92px + max(8px, calc(env(safe-area-inset-bottom, 0px) - 20px))
+  ) !important;
+}
+
+/* 激活页必须永远高于主屏 */
+.activation-screen {
+  z-index: 9000 !important;
+}
+
+.splash-screen {
+  z-index: 9500 !important;
 }
