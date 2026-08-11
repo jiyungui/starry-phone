@@ -14,6 +14,7 @@ const PORT = 3001;
 
 const UPLOAD_DIR = path.join(__dirname, "uploads");
 const ACTIVATION_FILE = path.join(__dirname, "activation-db.json");
+const PUBLIC_DIR = path.join(__dirname, "public");
 
 const ADMIN_TOKEN = "starry-admin";
 
@@ -46,6 +47,7 @@ if (!fs.existsSync(ACTIVATION_FILE)) {
 ================================ */
 
 app.use("/uploads", express.static(UPLOAD_DIR));
+app.use(express.static(PUBLIC_DIR));
 
 /* ===============================
    健康检查
@@ -378,6 +380,11 @@ app.use("/api", (req, res) => {
     message: "接口不存在",
     path: req.originalUrl,
   });
+});
+
+// 前端页面兜底
+app.get("*", (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, "index.html"));
 });
 
 /* ===============================
