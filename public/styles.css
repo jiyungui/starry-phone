@@ -1629,3 +1629,146 @@ button {
 .copy-device-button:active {
   transform: scale(0.96);
 }
+
+/* ===============================
+   iOS 桌面 PWA 全屏安全区修复
+   解决底部白条 / 蓝条 / Dock 悬空过高
+================================ */
+
+html {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 20% 18%,
+      rgba(255, 255, 255, 0.92),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 74% 16%,
+      rgba(240, 240, 240, 0.85),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 28% 70%,
+      rgba(210, 210, 210, 0.46),
+      transparent 38%
+    ),
+    linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4);
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+
+  background:
+    radial-gradient(
+      circle at 20% 18%,
+      rgba(255, 255, 255, 0.92),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 74% 16%,
+      rgba(240, 240, 240, 0.85),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 28% 70%,
+      rgba(210, 210, 210, 0.46),
+      transparent 38%
+    ),
+    linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4);
+}
+
+/* iOS Safari / PWA 高度兼容 */
+.phone-shell {
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 20% 18%,
+      rgba(255, 255, 255, 0.92),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 74% 16%,
+      rgba(240, 240, 240, 0.85),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 28% 70%,
+      rgba(210, 210, 210, 0.46),
+      transparent 38%
+    ),
+    linear-gradient(135deg, #dcdcdc, #f9f9f9 48%, #d4d4d4);
+}
+
+@supports (-webkit-touch-callout: none) {
+  html,
+  body,
+  .phone-shell {
+    height: -webkit-fill-available;
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* 壁纸固定铺满，包括底部安全区 */
+.wallpaper,
+.wallpaper-mask {
+  position: fixed;
+  inset: 0;
+}
+
+/* 给底部 Home Indicator 区域补一层同款毛玻璃背景 */
+.phone-shell::after {
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: calc(env(safe-area-inset-bottom, 0px) + 96px);
+  z-index: 5;
+  pointer-events: none;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(245, 245, 245, 0),
+    rgba(238, 238, 238, 0.48) 42%,
+    rgba(235, 235, 235, 0.72)
+  );
+
+  backdrop-filter: blur(18px) saturate(1.08);
+  -webkit-backdrop-filter: blur(18px) saturate(1.08);
+}
+
+/* Dock 保持在补底层上方 */
+.dock {
+  z-index: 30;
+
+  /*
+    原来一般是：
+    bottom: calc(16px + var(--safe-bottom));
+    这会导致 iPhone 底部空白过高。
+
+    这里让它更贴近底部。
+  */
+  bottom: max(10px, calc(env(safe-area-inset-bottom, 0px) - 18px));
+}
+
+/* 分页点跟着下移一点 */
+.page-dots {
+  z-index: 31;
+  bottom: calc(max(10px, calc(env(safe-area-inset-bottom, 0px) - 18px)) + 86px);
+}
+
+/* 主屏内容底部预留跟新 Dock 位置匹配 */
+.home-viewport {
+  bottom: calc(92px + max(10px, calc(env(safe-area-inset-bottom, 0px) - 18px)));
+}
