@@ -1,0 +1,6 @@
+node_modules/
+uploads/
+activation-db.json
+.env
+*.log
+.DS_Store
