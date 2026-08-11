@@ -1,11 +1,9 @@
 {
-  "name": "starry-phone-upload-server",
+  "name": "starry-phone",
   "version": "1.0.0",
-  "description": "星星机图片上传后端",
-  "main": "server.js",
+  "main": "server-new.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node server-new.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
