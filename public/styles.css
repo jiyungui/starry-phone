@@ -1919,3 +1919,35 @@ body::after {
 .dock-app em {
   display: none !important;
 }
+
+/* =====================================================
+   第二页底部组件与 Dock 分离
+   解决 Dock 上方出现长方形横框的问题
+===================================================== */
+
+/* 让主屏内容底部留更多空间给分页点和 Dock */
+.home-viewport {
+  bottom: calc(
+    126px + max(6px, calc(env(safe-area-inset-bottom, 0px) - 24px))
+  ) !important;
+}
+
+/* 第二页底部记录组件不要吃到最底部 */
+.page-two .record-widget {
+  height: calc(100% - 28px) !important;
+  align-self: start !important;
+  margin-bottom: 28px !important;
+}
+
+/* 防止第二页底部组件贴边 */
+.page-two .grid,
+.second-page-grid {
+  padding-bottom: 16px !important;
+}
+
+/* 分页点保持在 Dock 上方，不和记录组件边框重叠 */
+.page-dots {
+  bottom: calc(
+    max(6px, calc(env(safe-area-inset-bottom, 0px) - 24px)) + 94px
+  ) !important;
+}
