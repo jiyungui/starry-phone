@@ -20,7 +20,7 @@ const IMAGE_URL_STORAGE_KEY = "mini-phone-widget-image-url-v1";
  * 后端：http://localhost:3001
  * 就用下面这个。
  */
-const API_BASE_URL = `${location.protocol}//${location.hostname}:3001`;
+const API_BASE_URL = window.location.origin;
 console.log("星星机当前后端地址：", API_BASE_URL);
 
 /**

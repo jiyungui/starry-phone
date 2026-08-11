@@ -1756,3 +1756,96 @@ body::after {
 .splash-screen {
   z-index: 9500 !important;
 }
+
+/* =====================================================
+   Dock 纯胶囊悬浮修正
+   让 Dock 本体变成真正胶囊，不再像长方形卡片
+===================================================== */
+
+.dock {
+  position: fixed !important;
+  z-index: 100 !important;
+
+  /* 不再用超宽矩形感，左右收一点 */
+  left: 34px !important;
+  right: 34px !important;
+
+  /* 高度和圆角组成真正胶囊 */
+  height: 82px !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+
+  /* 贴近底部 */
+  bottom: max(8px, calc(env(safe-area-inset-bottom, 0px) - 18px)) !important;
+
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  align-items: center !important;
+  justify-items: center !important;
+
+  padding: 0 16px !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.72) !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.62),
+      rgba(235, 235, 235, 0.26)
+    ),
+    rgba(238, 238, 238, 0.36) !important;
+
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.86),
+    inset 0 -1px 1px rgba(210, 210, 210, 0.16),
+    0 18px 42px rgba(120, 120, 120, 0.18) !important;
+
+  backdrop-filter: blur(28px) saturate(1.15) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.15) !important;
+}
+
+/* 防止 Dock 外面还有旧补丁伪元素影响视觉 */
+.dock::before,
+.dock::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Dock 里面三个按钮本身透明，不要再形成一层长方形 */
+.dock-app {
+  width: 100% !important;
+  height: 100% !important;
+
+  display: grid !important;
+  place-items: center !important;
+
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Dock 里的小图标方块 */
+.dock-app span {
+  width: 56px !important;
+  height: 56px !important;
+
+  display: grid !important;
+  place-items: center !important;
+
+  border-radius: 22px !important;
+
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.84),
+    rgba(255, 255, 255, 0.24)
+  ) !important;
+
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.74),
+    0 8px 20px rgba(100, 100, 100, 0.12) !important;
+}
+
+/* Dock 不显示文字 */
+.dock-app em {
+  display: none !important;
+}
