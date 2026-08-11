@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>星星机激活码工具</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #eeeeee;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      }
+
+      .panel {
+        width: min(90vw, 420px);
+        padding: 28px;
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.72);
+        box-shadow: 0 20px 80px rgba(0, 0, 0, 0.08);
+      }
+
+      h1 {
+        margin: 0 0 20px;
+        font-size: 22px;
+      }
+
+      label {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 14px;
+        font-size: 14px;
+      }
+
+      input {
+        height: 42px;
+        border-radius: 14px;
+        border: 1px solid #ddd;
+        padding: 0 12px;
+      }
+
+      button {
+        width: 100%;
+        height: 44px;
+        border: 0;
+        border-radius: 999px;
+        background: #222;
+        color: white;
+        font-weight: 700;
+      }
+
+      pre {
+        white-space: pre-wrap;
+        word-break: break-all;
+        background: #f7f7f7;
+        padding: 14px;
+        border-radius: 14px;
+        margin-top: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="panel">
+      <h1>星星机激活码工具</h1>
+
+      <label>
+        后端地址
+        <input id="apiBase" value="http://localhost:3001" />
+      </label>
+
+      <label>
+        管理员口令
+        <input id="adminToken" value="starry-admin" />
+      </label>
+
+      <label>
+        设备 ID
+        <input id="deviceId" placeholder="粘贴激活页面显示的设备 ID" />
+      </label>
+
+      <button id="refreshBtn">随机刷新激活码</button>
+
+      <pre id="result">等待操作</pre>
+    </main>
+
+    <script>
+      const apiBase = document.getElementById("apiBase");
+      const adminToken = document.getElementById("adminToken");
+      const deviceId = document.getElementById("deviceId");
+      const refreshBtn = document.getElementById("refreshBtn");
+      const result = document.getElementById("result");
+
+      refreshBtn.addEventListener("click", async () => {
+        const base = apiBase.value.trim();
+        const token = adminToken.value.trim();
+        const id = deviceId.value.trim();
+
+        if (!id) {
+          result.textContent = "请填写设备 ID";
+          return;
+        }
+
+        refreshBtn.disabled = true;
+        refreshBtn.textContent = "生成中...";
+
+        try {
+          const response = await fetch(`${base}/api/admin/activation/refresh`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              deviceId: id,
+              adminToken: token,
+            }),
+          });
+
+          const data = await response.json();
+
+          result.textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+          result.textContent = "请求失败：\n" + error.message;
+        } finally {
+          refreshBtn.disabled = false;
+          refreshBtn.textContent = "随机刷新激活码";
+        }
+      });
+    </script>
+  </body>
+</html>
